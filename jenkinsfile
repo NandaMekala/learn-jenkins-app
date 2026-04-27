@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     stages {
-        /*
+
         stage('Build') {
             agent {
                 docker {
@@ -12,16 +12,11 @@ pipeline {
             }
             steps {
                 sh '''
-                    ls -la
-                    node --version
-                    npm --version
                     npm ci
-                    npm run build 
-                    ls -la
+                    npm run build
                 '''
             }
         }
-        */
 
         stage('Test'){
             agent {
@@ -33,11 +28,11 @@ pipeline {
             steps{
                 sh '''
                    npm ci
-                   test -f build/index.html
                    npm test
                 '''
             }
         }
+
         stage('E2E'){
             agent {
                 docker {
@@ -47,10 +42,10 @@ pipeline {
             }
             steps{
                 sh '''
-                   npm install serve 
+                   npm ci
+                   npm install serve
                    node_modules/.bin/serve -s build &
                    sleep 10
-                   npm ci
                    npx playwright test
                 '''
             }
